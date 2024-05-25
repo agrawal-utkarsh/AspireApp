@@ -72,6 +72,6 @@ A loan application can have multiple loan repayments, so a **one to many** relat
     --header 'User-Agent: insomnia/2023.5.8' \
     --data '{
     "loanApplicationId":"65e9a9f5-bb4c-4b10-9632-933e4e6066cd",
-    "amount":0.07699999999999985
+    "amount":0.8
     }'
 ![image](https://github.com/agrawal-utkarsh/AspireApp/assets/14595816/2152d6d0-6592-4545-9736-965b224c6222)
