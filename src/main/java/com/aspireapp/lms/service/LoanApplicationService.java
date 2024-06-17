@@ -4,9 +4,7 @@ import com.aspireapp.lms.exception.ValidationException;
 import com.aspireapp.lms.model.domain.LoanApplicationStatus;
 import com.aspireapp.lms.model.domain.LoanRepayment;
 import com.aspireapp.lms.model.domain.RepaymentStatus;
-import com.aspireapp.lms.model.request.ApproveLoanRequest;
 import com.aspireapp.lms.model.request.CreateLoanApplicationRequest;
-import com.aspireapp.lms.model.request.GetLoanApplicationsForUserRequest;
 import com.aspireapp.lms.model.request.SubmitLoanRepaymentRequest;
 import com.aspireapp.lms.model.domain.LoanApplication;
 import com.aspireapp.lms.repository.LoanApplicationRepository;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -52,8 +51,8 @@ public class LoanApplicationService {
      * Updates LoanApplication status
      * Saves updated LoanApplication to database
      */
-    public void approveLoan(ApproveLoanRequest request) throws ValidationException {
-        Optional<LoanApplication> loanApplicationOption = loanApplicationRepository.findById(request.getLoanId());
+    public void approveLoan(UUID loanApplicationId) throws ValidationException {
+        Optional<LoanApplication> loanApplicationOption = loanApplicationRepository.findById(loanApplicationId);
         validationService.validateLoanApplicationApprovalRequest(loanApplicationOption);
 
         LoanApplication loanApplication = loanApplicationOption.get();
@@ -64,8 +63,8 @@ public class LoanApplicationService {
     /**
      * Fetches LoanApplications for incoming user from database
      */
-    public List<LoanApplication> getLoanApplicationsForUser(GetLoanApplicationsForUserRequest request) {
-        List<LoanApplication> loanApplications = loanApplicationRepository.findAllByUserId(request.getUserId());
+    public List<LoanApplication> getLoanApplicationsForUser(UUID userId) {
+        List<LoanApplication> loanApplications = loanApplicationRepository.findAllByUserId(userId);
         return loanApplications;
     }
 
@@ -75,8 +74,8 @@ public class LoanApplicationService {
      * Updates pending repayments and loanApplication (if applicable)
      * Saves updated LoanApplication and repayments to database
      */
-    public void submitLoanRepayment(SubmitLoanRepaymentRequest request) throws ValidationException {
-        Optional<LoanApplication> loanApplicationOption = loanApplicationRepository.findById(request.getLoanApplicationId());
+    public void submitLoanRepayment(UUID loanApplicationId, SubmitLoanRepaymentRequest request) throws ValidationException {
+        Optional<LoanApplication> loanApplicationOption = loanApplicationRepository.findById(loanApplicationId);
         validationService.validateLoanRepaymentRequest(request, loanApplicationOption);
 
         LoanApplication loanApplication = loanApplicationOption.get();
@@ -96,7 +95,7 @@ public class LoanApplicationService {
      * Executes validation checks for the amount in incoming request and remainingAmount
      * Returns the index of first unpaid repayment
      */
-    private Integer skipPaidRepayments(List<LoanRepayment> repayments, Double repaymentAmount, Double loanApplicationAmount) throws ValidationException {
+    public Integer skipPaidRepayments(List<LoanRepayment> repayments, Double repaymentAmount, Double loanApplicationAmount) throws ValidationException {
         Integer currentRepaymentIndex = 0;
         Double amountAlreadyPaid = 0D;
 
@@ -116,7 +115,7 @@ public class LoanApplicationService {
      * Updates unpaid repayments to PAID status and also updates their remaining amount
      * Saves the updated repayments to database
      */
-    private Integer updateRepayments(Double repaymentAmount, List<LoanRepayment> repayments, Integer currentRepaymentIndex) {
+    public Integer updateRepayments(Double repaymentAmount, List<LoanRepayment> repayments, Integer currentRepaymentIndex) {
         List<LoanRepayment> repaymentsToBeUpdated = new ArrayList<>();
         Integer repaymentsRemaining = repayments.size() - currentRepaymentIndex;
         while (repaymentAmount > 0 && currentRepaymentIndex < repayments.size()) {

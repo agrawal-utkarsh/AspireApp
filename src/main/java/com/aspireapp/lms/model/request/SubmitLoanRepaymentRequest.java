@@ -8,7 +8,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
+@Setter
 public class SubmitLoanRepaymentRequest {
-    private UUID loanApplicationId;
     private Double amount;
 }

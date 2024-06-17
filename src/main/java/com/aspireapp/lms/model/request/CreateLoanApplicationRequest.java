@@ -8,6 +8,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
+@Setter
 public class CreateLoanApplicationRequest {
     private UUID userId;
     private Double amountRequired;

@@ -35,7 +35,7 @@ A loan application can have multiple loan repayments, so a **one to many** relat
 ## Api Screenshots
 ### Create Loan Application
     curl --request POST \
-    --url http://localhost:8080/loanApplication/createLoanApplication \
+    --url http://localhost:8080/loan-applications/createLoanApplication \
     --header 'Content-Type: application/json' \
     --header 'User-Agent: insomnia/2023.5.8' \
     --data '{
@@ -43,35 +43,21 @@ A loan application can have multiple loan repayments, so a **one to many** relat
     "loanTerm":10,
     "userId":"46e5339f-e23d-4776-a513-3a354aafc3ea"
     }'
-![image](https://github.com/agrawal-utkarsh/AspireApp/assets/14595816/549d5163-de05-4f71-8d27-73906c079de5)
 
 ### Approve Loan Application
-    curl --request POST \
-    --url http://localhost:8080/loanApplication/approveLoan \
-    --header 'Content-Type: application/json' \
-    --header 'User-Agent: insomnia/2023.5.8' \
-    --data '{
-    "loanId":"65e9a9f5-bb4c-4b10-9632-933e4e6066cd"
-    }'
-![image](https://github.com/agrawal-utkarsh/AspireApp/assets/14595816/0e00ea34-0559-4719-87b9-705bd33e4454)
-
+    curl --request PUT \
+    --url http://localhost:8080/loan-applications/8dc0d87a-0f46-4105-ac65-0a33b761fee5/approve \
+    --header 'User-Agent: insomnia/2023.5.8'
 ### Get Loan Applications for User
-    curl --request POST \
-    --url http://localhost:8080/loanApplication/getLoanApplicationsForUser \
-    --header 'Content-Type: application/json' \
-    --header 'User-Agent: insomnia/2023.5.8' \
-    --data '{
-    "userId":"46e5339f-e23d-4776-a513-3a354aafc3ea"
-    }'
-![image](https://github.com/agrawal-utkarsh/AspireApp/assets/14595816/08f2f1d9-3822-4726-80f4-b93f9d01895a)
+    curl --request GET \
+    --url http://localhost:8080/loan-applications/user/46e5339f-e23d-4776-a513-3a354aafc3ea \
+    --header 'User-Agent: insomnia/2023.5.8'
 
 ### Submit Loan Repayment
     curl --request POST \
-    --url http://localhost:8080/loanApplication/submitLoanRepayment \
+    --url http://localhost:8080/loan-applications/8dc0d87a-0f46-4105-ac65-0a33b761fee5/repayments \
     --header 'Content-Type: application/json' \
     --header 'User-Agent: insomnia/2023.5.8' \
     --data '{
-    "loanApplicationId":"65e9a9f5-bb4c-4b10-9632-933e4e6066cd",
     "amount":0.8
     }'
-![image](https://github.com/agrawal-utkarsh/AspireApp/assets/14595816/2152d6d0-6592-4545-9736-965b224c6222)
